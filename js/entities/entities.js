@@ -12,7 +12,7 @@ game.PlayerEntity = me.Entity.extend({
 
         this.body.setVelocity(2, 10);
 
-        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.1);
 
         this.alwaysUpdate = true;
 
@@ -21,13 +21,16 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.addAnimation("stand", [0]);
 
         this.renderable.setCurrentAnimation("stand");
+
     },
 
     /**
      * update the entity
      */
     update: function (dt) {
-        if (me.input.isKeyPressed('left')) {
+
+
+        if (actionNum == 1) {
             // flip the sprite on horizontal axis
             this.renderable.flipX(true);
 
@@ -38,9 +41,19 @@ game.PlayerEntity = me.Entity.extend({
             if (!this.renderable.isCurrentAnimation("walk")) {
                 this.renderable.setCurrentAnimation("walk");
             }
+
+            frameNum += 1;
+
+            if(frameNum == 30){
+              actionNum = 0;
+              frameNum = 0
+            }
+
+
         }
-        else if (me.input.isKeyPressed('right')) {
+        else if (actionNum == 2) {
             // unflip the sprite
+
             this.renderable.flipX(false);
 
             // update the entity velocity
@@ -50,6 +63,14 @@ game.PlayerEntity = me.Entity.extend({
             if (!this.renderable.isCurrentAnimation("walk")) {
                 this.renderable.setCurrentAnimation("walk");
             }
+
+            frameNum += 1;
+
+            if(frameNum == 30){
+              actionNum = 0;
+              frameNum = 0
+            }
+            //actionNum = 0;
         }
         else {
             this.body.vel.x = 0;
@@ -58,7 +79,7 @@ game.PlayerEntity = me.Entity.extend({
             this.renderable.setCurrentAnimation("stand");
         }
 
-        if (me.input.isKeyPressed('space')) {
+        if (actionNum == 3) {
             // make sure we are not already jumping or falling
             if (!this.body.jumping && !this.body.falling) {
                 // set current vel to the maximum defined value
@@ -68,6 +89,8 @@ game.PlayerEntity = me.Entity.extend({
                 // set the jumping flag
                 this.body.jumping = true;
             }
+
+            actionNum = 0;
         }
 
         // apply physics to the body (this moves the entity)
@@ -86,6 +109,10 @@ game.PlayerEntity = me.Entity.extend({
      */
     onCollision: function (response, other) {
         // Make all other objects solid
+
         return true;
     }
+
+
+
 });
