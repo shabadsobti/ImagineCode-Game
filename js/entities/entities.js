@@ -10,7 +10,7 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.body.setVelocity(2, 10);
+        this.body.setVelocity(2, 15);
 
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.1);
 
@@ -21,6 +21,8 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.addAnimation("stand", [0]);
 
         this.renderable.setCurrentAnimation("stand");
+        
+        this.anchorPoint.set(-0.4, 0);
 
     },
 
@@ -66,9 +68,10 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNum += 1;
 
-            if(frameNum == 30){
+            if(frameNum == 45){
               actionNum = 0;
               frameNum = 0
+              this.renderable.setCurrentAnimation("stand");
             }
             //actionNum = 0;
         }
@@ -85,13 +88,43 @@ game.PlayerEntity = me.Entity.extend({
                 // set current vel to the maximum defined value
                 // gravity will then do the rest
                 this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
-
                 // set the jumping flag
                 this.body.jumping = true;
             }
+            this.body.vel.x += this.body.accel.x * me.timer.tick;
+            this.body.vel.x += this.body.accel.x * me.timer.tick;
 
-            actionNum = 0;
+            frameNum += 1;
+            if (frameNum >= 30 && !this.body.jumping) {
+                actionNum = 0;
+                frameNum = 0
+                this.renderable.setCurrentAnimation("stand");
+            }
         }
+
+        // experimental ladder climbing method: does not work rn
+        /*else if (actionNum == 4) {
+            // unflip the sprite
+
+            this.renderable.flipX(false);
+
+            // update the entity velocity
+            this.body.vel.y -= this.body.accel.y * me.timer.tick;
+
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
+
+            frameNum += 1;
+
+            if (frameNum == 5) {
+                actionNum = 0;
+                frameNum = 0
+                this.renderable.setCurrentAnimation("stand");
+            }
+            //actionNum = 0;
+        }*/
 
         // apply physics to the body (this moves the entity)
         this.body.update(dt);
