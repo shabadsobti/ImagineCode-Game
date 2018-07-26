@@ -55,24 +55,27 @@ game.PlayerEntity = me.Entity.extend({
         }
         else if (actionNum == 2) {
             // unflip the sprite
-            while(right != 0) {
-                this.renderable.flipX(false);
 
-                // update the entity velocity
-                this.body.vel.x += this.body.accel.x * me.timer.tick;
+            this.renderable.flipX(false);
 
-                // change to the walking animation
-                if (!this.renderable.isCurrentAnimation("walk")) {
-                    this.renderable.setCurrentAnimation("walk");
-                }
+            // update the entity velocity
+            this.body.vel.x += this.body.accel.x * me.timer.tick;
 
-                frameNum += 1;
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
 
-                if (frameNum == 45) {
-                    actionNum = 0;
-                    frameNum = 0
-                    this.renderable.setCurrentAnimation("stand");
-                }
+            frameNum += 1;
+
+            if(frameNum == 45 && right == 1){
+              actionNum = 0;
+              frameNum = 0;
+              this.renderable.setCurrentAnimation("stand");
+              right = 0;
+            }
+            else if(frameNum == 45){
+                frameNum = 0;
                 --right;
             }
             //actionNum = 0;

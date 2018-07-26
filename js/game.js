@@ -6,7 +6,12 @@ var frameNum = 0;
 
 var moveRight = function () {
     actionNum = 2;
-    ++right;
+    if(right == 0){
+        right = 1;
+    }
+    else{
+        right += 1;
+    };
 }
 
 var game = {
