@@ -1,6 +1,13 @@
 var actionNum = 0;
+var right = 0;
 var frameNum = 0;
 /* game namespace */
+
+
+var moveRight = function () {
+    actionNum = 2;
+    ++right;
+}
 
 var game = {
     /**
