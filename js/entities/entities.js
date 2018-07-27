@@ -10,19 +10,25 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.body.setVelocity(2, 15);
+        this.body.setVelocity(2, 2);
 
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.1);
 
         this.alwaysUpdate = true;
 
-        this.renderable.addAnimation("walk", [0, 1, 2, 3, 4, 5, 6, 7]);
+        this.renderable.addAnimation("walk_right", [3, 7, 11, 15]);
+        this.renderable.addAnimation("walk_left", [1, 5, 9, 13]);
+        this.renderable.addAnimation("walk_up", [2, 6, 10, 14]);
+        this.renderable.addAnimation("walk_down", [0, 4, 8, 12]);
 
-        this.renderable.addAnimation("stand", [0]);
+        this.renderable.addAnimation("stand_r", [3]);
+        this.renderable.addAnimation("stand_l", [1]);
+        this.renderable.addAnimation("stand_u", [2]);
+        this.renderable.addAnimation("stand_d", [0]);
 
-        this.renderable.setCurrentAnimation("stand");
-        
-        this.anchorPoint.set(-0.4, 0);
+        this.renderable.setCurrentAnimation("stand_r");
+
+        //this.anchorPoint.set(-0, 0);
 
     },
 
@@ -32,80 +38,117 @@ game.PlayerEntity = me.Entity.extend({
     update: function (dt) {
 
 
-        if (actionNum == 1) {
+        if (actionL == 1) {
             // flip the sprite on horizontal axis
-            this.renderable.flipX(true);
 
             // update the entity velocity
             this.body.vel.x -= this.body.accel.x * me.timer.tick;
 
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk")) {
-                this.renderable.setCurrentAnimation("walk");
+            if (!this.renderable.isCurrentAnimation("walk_left")) {
+                this.renderable.setCurrentAnimation("walk_left");
             }
 
-            frameNum += 1;
+            frameNumL += 1;
 
-            if(frameNum == 30){
-              actionNum = 0;
-              frameNum = 0
+            if(frameNumL == 45 && left == 1){
+                actionL = 0;
+                frameNumL = 0;
+                this.renderable.setCurrentAnimation("stand_l");
+                left = 0;
+            }
+            else if(frameNumL == 45){
+                frameNumL = 0;
+                --left;
             }
 
 
         }
-        else if (actionNum == 2) {
-            // unflip the sprite
-
-            this.renderable.flipX(false);
+        else if (actionR == 1) {
 
             // update the entity velocity
             this.body.vel.x += this.body.accel.x * me.timer.tick;
 
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk")) {
-                this.renderable.setCurrentAnimation("walk");
+            if (!this.renderable.isCurrentAnimation("walk_right")) {
+                this.renderable.setCurrentAnimation("walk_right");
             }
 
-            frameNum += 1;
+            frameNumR += 1;
 
-            if(frameNum == 45 && right == 1){
-              actionNum = 0;
-              frameNum = 0;
-              this.renderable.setCurrentAnimation("stand");
-              right = 0;
+            if(frameNumR == 45 && right == 1){
+                actionR = 0;
+                frameNumR = 0;
+                this.renderable.setCurrentAnimation("stand_r");
+                right = 0;
             }
-            else if(frameNum == 45){
-                frameNum = 0;
+            else if(frameNumR == 45){
+                frameNumR = 0;
                 --right;
             }
             //actionNum = 0;
         }
+
+        else if (actionU == 1) {
+
+
+            // make sure we are not already jumping or falling
+            this.body.vel.y -= this.body.accel.y * me.timer.tick;
+
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk_up")) {
+                this.renderable.setCurrentAnimation("walk_up");
+            }
+
+            frameNumU += 1;
+
+            if(frameNumU == 45 && up == 1){
+                actionU = 0;
+                frameNumU = 0;
+                this.renderable.setCurrentAnimation("stand_u");
+                up = 0;
+            }
+            else if(frameNumU == 45){
+                frameNumU = 0;
+                --up;
+            }
+
+        }
+
+        else if (actionD == 1) {
+
+            // make sure we are not already jumping or falling
+            this.body.vel.y += this.body.accel.y * me.timer.tick;
+
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk_down")) {
+                this.renderable.setCurrentAnimation("walk_down");
+            }
+
+            frameNumD += 1;
+
+            if(frameNumD == 45 && down == 1){
+                actionD = 0;
+                frameNumD = 0;
+                this.renderable.setCurrentAnimation("stand_d");
+                down = 0;
+            }
+            else if(frameNum == 45){
+                frameNumD = 0;
+                --down;
+            }
+
+        }
+
         else {
             this.body.vel.x = 0;
+            this.body.vel.y = 0;
 
             // change to the standing animation
-            this.renderable.setCurrentAnimation("stand");
+            this.renderable.setCurrentAnimation("stand_d");
         }
 
-        if (actionNum == 3) {
-            // make sure we are not already jumping or falling
-            if (!this.body.jumping && !this.body.falling) {
-                // set current vel to the maximum defined value
-                // gravity will then do the rest
-                this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
-                // set the jumping flag
-                this.body.jumping = true;
-            }
-            this.body.vel.x += this.body.accel.x * me.timer.tick;
-            this.body.vel.x += this.body.accel.x * me.timer.tick;
 
-            frameNum += 1;
-            if (frameNum >= 30 && !this.body.jumping) {
-                actionNum = 0;
-                frameNum = 0
-                this.renderable.setCurrentAnimation("stand");
-            }
-        }
 
         // experimental ladder climbing method: does not work rn
         /*else if (actionNum == 4) {
