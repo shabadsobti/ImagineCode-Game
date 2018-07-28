@@ -1,61 +1,53 @@
-var actionR = 0;
-var actionL = 0;
-var actionU = 0;
-var actionD = 0;
-var right = 0;
-var left = 0;
-var up = 0;
-var down = 0;
+var actionList = [];
 var frameNumR = 0;
 var frameNumL = 0;
 var frameNumU = 0;
 var frameNumD = 0;
 
 var frameNum = 0;
-var actionNum = 0;
 /* game namespace */
 
 
 var moveRight = function () {
-    actionR = 1;
-    if(right == 0){
-        right = 1;
-    }
-    else{
-        right += 1;
-    }
+    actionList.push(2);
+    // if(right == 0){
+    //     right = 1;
+    // }
+    // else{
+    //     right += 1;
+    // }
 
 
 };
 
 var moveLeft = function () {
-    actionL = 1;
-    if (left == 0) {
-        left = 1;
-    }
-    else {
-        left += 1;
-    }
+    actionList.push(1);
+    // if (left == 0) {
+    //     left = 1;
+    // }
+    // else {
+    //     left += 1;
+    // }
 };
 
 var moveUp = function () {
-    actionU = 1;
-    if(up == 0){
-        up = 1;
-    }
-    else {
-        up += 1;
-    }
+    actionList.push(3);
+    // if(up == 0){
+    //     up = 1;
+    // }
+    // else {
+    //     up += 1;
+    // }
 };
 
 var moveDown = function () {
-    actionD = 1;
-    if(down == 0){
-        down = 1;
-    }
-    else {
-        down += 1;
-    }
+    actionList.push(4);
+    // if(down == 0){
+    //     down = 1;
+    // }
+    // else {
+    //     down += 1;
+    // }
 }
 
 

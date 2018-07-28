@@ -1,6 +1,10 @@
 /**
  * Player Entity
  */
+
+var actionNum = 0;
+
+
 game.PlayerEntity = me.Entity.extend({
 
     /**
@@ -30,6 +34,8 @@ game.PlayerEntity = me.Entity.extend({
 
         //this.anchorPoint.set(-0, 0);
 
+
+
     },
 
     /**
@@ -37,8 +43,13 @@ game.PlayerEntity = me.Entity.extend({
      */
     update: function (dt) {
 
+        if (actionNum == 0 && actionList.length != 0){
+            actionNum = actionList[0];
 
-        if (actionL == 1) {
+        }
+
+
+        if (actionNum == 1) {
             // flip the sprite on horizontal axis
 
             // update the entity velocity
@@ -51,20 +62,16 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumL += 1;
 
-            if(frameNumL == 45 && left == 1){
-                actionL = 0;
+            if(frameNumL == 45) {
+                actionNum = 0;
+                actionList.shift();
                 frameNumL = 0;
                 this.renderable.setCurrentAnimation("stand_l");
-                left = 0;
-            }
-            else if(frameNumL == 45){
-                frameNumL = 0;
-                --left;
             }
 
 
         }
-        else if (actionR == 1) {
+        else if (actionNum == 2) {
 
             // update the entity velocity
             this.body.vel.x += this.body.accel.x * me.timer.tick;
@@ -76,20 +83,15 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumR += 1;
 
-            if(frameNumR == 45 && right == 1){
-                actionR = 0;
+            if(frameNumR == 45){
+                actionNum = 0;
+                actionList.shift();
                 frameNumR = 0;
                 this.renderable.setCurrentAnimation("stand_r");
-                right = 0;
             }
-            else if(frameNumR == 45){
-                frameNumR = 0;
-                --right;
-            }
-            //actionNum = 0;
         }
 
-        else if (actionU == 1) {
+        else if (actionNum == 3) {
 
 
             // make sure we are not already jumping or falling
@@ -102,20 +104,17 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumU += 1;
 
-            if(frameNumU == 45 && up == 1){
-                actionU = 0;
+            if(frameNumU == 45){
+                actionNum = 0;
+                actionList.shift();
                 frameNumU = 0;
                 this.renderable.setCurrentAnimation("stand_u");
-                up = 0;
             }
-            else if(frameNumU == 45){
-                frameNumU = 0;
-                --up;
-            }
+
 
         }
 
-        else if (actionD == 1) {
+        else if (actionNum == 4) {
 
             // make sure we are not already jumping or falling
             this.body.vel.y += this.body.accel.y * me.timer.tick;
@@ -127,16 +126,13 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumD += 1;
 
-            if(frameNumD == 45 && down == 1){
-                actionD = 0;
+            if(frameNumD == 45){
+                actionNum = 0;
+                actionList.shift();
                 frameNumD = 0;
                 this.renderable.setCurrentAnimation("stand_d");
-                down = 0;
             }
-            else if(frameNum == 45){
-                frameNumD = 0;
-                --down;
-            }
+
 
         }
 
