@@ -58,5 +58,10 @@ game.resources = [
         "name": "area01",
         "type": "tmx",
         "src": "data/map/area01.tmx"
-    }
+    },
+
+    { name: "PressStart2P",       type:"image", src: "data/fnt/PressStart2P.png" },
+    { name: "PressStart2P",       type:"binary", src: "data/fnt/PressStart2P.fnt"},
+
+
 ];

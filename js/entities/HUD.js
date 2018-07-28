@@ -61,6 +61,8 @@ game.HUD.ScoreItem = me.Renderable.extend({
      */
     draw : function (context) {
         // draw it baby !
+        //this.font.draw (renderer, game.data.score, me.game.viewport.width + this.pos.x, me.game.viewport.height + this.pos.y);
+
     }
 
 });

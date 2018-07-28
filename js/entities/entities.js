@@ -5,6 +5,32 @@
 var actionNum = 0;
 
 
+game.CoinEntity = me.CollectableEntity.extend({
+    // extending the init function is not mandatory
+    // unless you need to add some extra initialization
+    init: function (x, y, settings) {
+        // call the parent constructor
+        this._super(me.CollectableEntity, 'init', [x, y , settings]);
+
+    },
+
+    // this function is called by the engine, when
+    // an object is touched by something (here collected)
+    onCollision : function (response, other) {
+        // do something when collected
+        game.data.score += 1;
+        // make sure it cannot be collected "again"
+        this.body.setCollisionMask(me.collision.types.NO_OBJECT);
+
+        // remove it
+        me.game.world.removeChild(this);
+
+
+        return false
+    }
+});
+
+
 game.PlayerEntity = me.Entity.extend({
 
     /**
@@ -48,6 +74,19 @@ game.PlayerEntity = me.Entity.extend({
 
         }
 
+        if(game.data.bump != game.data.score){
+            actionList = [];
+            actionNum = 0;
+            game.data.score = 0;
+            game.data.bump = 0;
+            game.onload();
+        }
+
+        if (game.data.score == 3){
+            console.log(game.data.score);
+            game.data.score = 0;
+        }
+
 
         if (actionNum == 1) {
             // flip the sprite on horizontal axis
@@ -62,11 +101,12 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumL += 1;
 
-            if(frameNumL == 45) {
+            if(frameNumL == 38) {
                 actionNum = 0;
                 actionList.shift();
                 frameNumL = 0;
                 this.renderable.setCurrentAnimation("stand_l");
+                this.body.vel.x = 0;
             }
 
 
@@ -83,11 +123,12 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumR += 1;
 
-            if(frameNumR == 45){
+            if(frameNumR == 38){
                 actionNum = 0;
                 actionList.shift();
                 frameNumR = 0;
                 this.renderable.setCurrentAnimation("stand_r");
+                this.body.vel.x = 0;
             }
         }
 
@@ -104,11 +145,12 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumU += 1;
 
-            if(frameNumU == 45){
+            if(frameNumU == 38){
                 actionNum = 0;
                 actionList.shift();
                 frameNumU = 0;
                 this.renderable.setCurrentAnimation("stand_u");
+                this.body.vel.y = 0;
             }
 
 
@@ -126,11 +168,12 @@ game.PlayerEntity = me.Entity.extend({
 
             frameNumD += 1;
 
-            if(frameNumD == 45){
+            if(frameNumD == 38){
                 actionNum = 0;
                 actionList.shift();
                 frameNumD = 0;
                 this.renderable.setCurrentAnimation("stand_d");
+                this.body.vel.y = 0;
             }
 
 
@@ -186,10 +229,13 @@ game.PlayerEntity = me.Entity.extend({
      */
     onCollision: function (response, other) {
         // Make all other objects solid
-
+        game.data.bump += 1;
         return true;
     }
 
 
 
 });
+
+
+
